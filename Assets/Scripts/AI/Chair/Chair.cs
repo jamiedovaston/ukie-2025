@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class Chair : MonoBehaviour, IChairable
 {
-    public Transform m_SitTransform;
     public Transform sitSocket { get => m_SitTransform; }
+    public Vector3 position { get => transform.position; }
+    public bool occupied { get; set; }
+
+    public Transform m_SitTransform;
 
     public static IChairable GetRandomChair()
     {

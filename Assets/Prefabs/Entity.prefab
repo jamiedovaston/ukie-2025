@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: ffe69bdbc7615234fb3074402caf4894, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -133,6 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0dfbc2f6acd55f4388edac9a7feea48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Mesh: {fileID: 7574737577022223775}
 --- !u!195 &7940557959953681782
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -142,8 +143,8 @@ NavMeshAgent:
   m_GameObject: {fileID: 2613174592837804529}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
+  m_Radius: 0.1
+  m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -168,7 +169,7 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

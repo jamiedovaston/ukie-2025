@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     public PlayerMovement m_Movement;
+    public PlayerInteract m_Interact;
 
     InputSystem_Actions m_ActionMap;
 
@@ -20,6 +23,8 @@ public class PlayerController : MonoBehaviour
 
         m_ActionMap.Player.Move.performed += Move_performed;
         m_ActionMap.Player.Move.canceled += Move_canceled;
+
+        m_ActionMap.Player.Interact.performed += Interact_performed;
     }
 
 
@@ -28,10 +33,18 @@ public class PlayerController : MonoBehaviour
         m_ActionMap.Player.Move.performed -= Move_performed;
         m_ActionMap.Player.Move.canceled -= Move_canceled;
 
+        m_ActionMap.Player.Interact.performed -= Interact_performed;
+
         m_ActionMap.Disable();
     }
 
+
     #region Actions
+
+    private void Interact_performed(InputAction.CallbackContext obj)
+    {
+        
+    }
 
     private void Move_performed(InputAction.CallbackContext obj)
     {
