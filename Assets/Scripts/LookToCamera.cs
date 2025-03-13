@@ -1,22 +1,36 @@
 using UnityEngine;
+using UnityEngine.Animations;
 
+[RequireComponent(typeof(LookAtConstraint))]
 public class LookToCamera : MonoBehaviour
 {
-    private Camera m_Camera;
+    private LookAtConstraint m_LookAtConstraint;
 
-    private void Start() => m_Camera = Camera.main; // Use main camera
-
-    private void Update()
+    private void Start()
     {
-        Vector3 upDirection = (m_Camera.transform.position - transform.position).normalized;
+        if (m_LookAtConstraint == null)
+        {
+            m_LookAtConstraint = GetComponent<LookAtConstraint>();
+        }
 
-        // Define a stable forward direction (perpendicular to up)
-        Vector3 forwardDirection = Vector3.Cross(upDirection, transform.right).normalized;
+        if (m_LookAtConstraint != null && Camera.main != null)
+        {
+            // Create a ConstraintSource for the main camera
+            ConstraintSource source = new ConstraintSource
+            {
+                sourceTransform = Camera.main.transform,
+                weight = 1f // Full influence
+            };
 
-        // Ensure forward direction is truly perpendicular
-        forwardDirection = Vector3.Cross(upDirection, forwardDirection).normalized;
+            // Clear existing sources and add the new one
+            m_LookAtConstraint.SetSources(new System.Collections.Generic.List<ConstraintSource> { source });
 
-        // Apply rotation: Y-axis points to camera
-        transform.rotation = Quaternion.LookRotation(forwardDirection, upDirection);
+            // Enable the constraint
+            m_LookAtConstraint.constraintActive = true;
+        }
+        else
+        {
+            Debug.LogWarning("LookAtConstraint or Camera.main is missing!");
+        }
     }
 }

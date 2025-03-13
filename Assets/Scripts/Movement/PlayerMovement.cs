@@ -5,7 +5,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5f;
     private CharacterController controller;
-    private Vector3 moveDirection;
+    public Vector3 moveDirection;
 
     private void Awake()
     {

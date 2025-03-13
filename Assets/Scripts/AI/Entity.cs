@@ -11,8 +11,9 @@ public class Entity : MonoBehaviour
     private TeamData m_Team;
 
     private NavMeshAgent m_NavMeshAgent;
+    private Rigidbody rb;
+    
     private bool pickedUp = false;
-
 
     public void Initialise(float _moveSpeed, TeamData _data)
     {
@@ -22,6 +23,7 @@ public class Entity : MonoBehaviour
         m_Mesh.material.color = _data.color;
 
         m_NavMeshAgent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
 
         StartCoroutine(C_NavigateToChair());
     }
@@ -29,21 +31,22 @@ public class Entity : MonoBehaviour
     public void Pickup()
     {
         pickedUp = true;
-        m_NavMeshAgent.enabled = false;
     }
 
     public void Drop()
     {
         StartCoroutine(C_RagdollWait());
-
         pickedUp = false;
-        m_NavMeshAgent.enabled = true;
+        m_NavMeshAgent.isStopped = true;
+        rb.isKinematic = false;
     }
 
     public IEnumerator C_RagdollWait()
     {
         yield return new WaitForSeconds(3.0f);
         StartCoroutine(C_NavigateToChair());
+        rb.isKinematic = true;
+        m_NavMeshAgent.isStopped = false;
     }
 
     public IEnumerator C_NavigateToChair()
@@ -58,22 +61,19 @@ public class Entity : MonoBehaviour
 
         if(!chair.occupied) StartCoroutine(C_SitInChair(chair));
         else StartCoroutine(C_NavigateToChair());
-
     }
 
     public IEnumerator C_SitInChair(IChairable chair)
     {
         chair.occupied = true;
-        m_NavMeshAgent.isStopped = true;
-
+        
         while (!pickedUp)
         {
             yield return new WaitForFixedUpdate();
 
             transform.position = chair.sitSocket.position;
         }
-
-        m_NavMeshAgent.isStopped = false;
+        
         chair.occupied = false;
     }
 }
