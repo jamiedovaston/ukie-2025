@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Chair : MonoBehaviour, IChairable
+public class Chair : MonoBehaviour
 {
     public Transform sitSocket { get => m_SitTransform; }
     public Vector3 position { get => transform.position; }
@@ -11,14 +11,23 @@ public class Chair : MonoBehaviour, IChairable
 
     public Transform m_SitTransform;
 
-    public static IChairable GetRandomChair()
+    public static List<Chair> allChairs = null;
+
+    void Awake()
     {
-        List<IChairable> chairable = InterfaceUtility.FindObjectsWithInterface<IChairable>();
+        if (allChairs == null)
+        {
+            allChairs = FindObjectsByType<Chair>(FindObjectsSortMode.None).ToList();
+        }
+    }
 
-        Debug.Assert(chairable.Any(), "No chairs in chair list!");
+    public static Chair GetRandomChair()
+    {
+        if (allChairs == null || allChairs.Count == 0)
+            return null;
 
-        int random = Random.Range(0, chairable.Count);
-        IChairable chair = chairable[random];
+        int random = UnityEngine.Random.Range(0, allChairs.Count);
+        Chair chair = allChairs[random];
 
         return chair;
     }

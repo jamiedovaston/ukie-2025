@@ -12,7 +12,7 @@ public class Entity : MonoBehaviour
 
     private NavMeshAgent m_NavMeshAgent;
     private Rigidbody rb;
-    
+
     private bool pickedUp = false;
 
     public void Initialise(float _moveSpeed, TeamData _data)
@@ -30,17 +30,18 @@ public class Entity : MonoBehaviour
 
     public void Pickup()
     {
+        m_NavMeshAgent.isStopped = true;
         pickedUp = true;
     }
-
+    
     public void Drop()
     {
-        StartCoroutine(C_RagdollWait());
+        if (C_Ragdoll != null) StopCoroutine(C_Ragdoll);
+        C_Ragdoll = StartCoroutine(C_RagdollWait());
         pickedUp = false;
-        m_NavMeshAgent.isStopped = true;
-        rb.isKinematic = false;
     }
 
+    Coroutine C_Ragdoll;
     public IEnumerator C_RagdollWait()
     {
         yield return new WaitForSeconds(3.0f);
@@ -51,29 +52,40 @@ public class Entity : MonoBehaviour
 
     public IEnumerator C_NavigateToChair()
     {
-        IChairable chair = Chair.GetRandomChair();
-        m_NavMeshAgent.SetDestination(chair.position); // chair
-
-        while (Vector3.Distance(transform.position, chair.position) > 2 && !pickedUp)
+        while (!pickedUp)
         {
-            yield return new WaitForFixedUpdate();
-        }
+            Chair chair = Chair.GetRandomChair();
+            if (chair == null) yield break; // No chair found, exit coroutine
 
-        if(!chair.occupied) StartCoroutine(C_SitInChair(chair));
-        else StartCoroutine(C_NavigateToChair());
+            m_NavMeshAgent.SetDestination(chair.position);
+
+            while (Vector3.Distance(transform.position, chair.position) > 2 && !pickedUp)
+            {
+                yield return new WaitForFixedUpdate();
+            }
+
+            if (!chair.occupied)
+            {
+                StartCoroutine(C_SitInChair(chair));
+                yield break; // Exit the while loop and coroutine once a chair is found and occupied
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.5f); // Delay before trying to find another chair
+            }
+        }
     }
 
-    public IEnumerator C_SitInChair(IChairable chair)
+    public IEnumerator C_SitInChair(Chair chair)
     {
         chair.occupied = true;
-        
+
         while (!pickedUp)
         {
             yield return new WaitForFixedUpdate();
-
             transform.position = chair.sitSocket.position;
         }
-        
+
         chair.occupied = false;
     }
 }

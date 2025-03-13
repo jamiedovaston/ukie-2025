@@ -39,7 +39,7 @@ namespace JD.Utility.General
         /// <returns></returns>
         public static List<T> FindObjectsWithInterface<T>(bool includeDisabled = false) where T : class
         {
-            GameObject[] allGameObjects = includeDisabled ? Resources.FindObjectsOfTypeAll<GameObject>() : GameObject.FindObjectsOfType<GameObject>();
+            GameObject[] allGameObjects = includeDisabled ? Resources.FindObjectsOfTypeAll<GameObject>() : GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
             List<T> all = new List<T>();
 
             foreach (GameObject go in allGameObjects)

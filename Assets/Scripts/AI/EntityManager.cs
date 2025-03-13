@@ -1,11 +1,14 @@
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static TeamOppositionChartSO;
 
 public class EntityManager : MonoBehaviour
 {
     public GameObject m_EntityPrefab;
 
-    public Transform m_SpawnPoint;
+    public List<Transform> m_SpawnPoints;
 
     private bool hasEnded = false;
 
@@ -21,10 +24,14 @@ public class EntityManager : MonoBehaviour
         while (!hasEnded)
         {
             yield return new WaitForSeconds(2); // replace
+            TeamOpposition_Data data = TeamOppositionChartSO.instance.GetRandomTeamData();
 
-            Entity entity = Instantiate(m_EntityPrefab, m_SpawnPoint.position, Quaternion.identity).GetComponent<Entity>();
-
-            entity.Initialise(5.0f, TeamData.GetRandom());
+            foreach(TeamData t in data.Teams)
+            {
+                Entity entity = Instantiate(m_EntityPrefab, m_SpawnPoints[Random.Range(0, m_SpawnPoints.Count)].position, Quaternion.identity).GetComponent<Entity>();
+                entity.Initialise(5.0f, t);
+                yield return new WaitForSeconds(Random.Range(.6f, 1.5f));
+            }
         }
     }
 }

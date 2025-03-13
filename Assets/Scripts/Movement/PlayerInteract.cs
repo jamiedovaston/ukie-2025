@@ -15,10 +15,8 @@ public class PlayerInteract : MonoBehaviour
     {
         if(m_CurrentlyHeldEntity != null)
         {
-            m_CurrentlyHeldEntity.Drop();
-            m_CurrentlyHeldEntity = null;
-            Debug.Log("Entity dropped!");
             holding = false;
+            Debug.Log("Entity dropped!");
         }
         else
         {
@@ -66,6 +64,11 @@ public class PlayerInteract : MonoBehaviour
         m_CurrentlyHeldEntity.transform.SetParent(null);
 
         Rigidbody rb = m_CurrentlyHeldEntity.GetComponent<Rigidbody>();
-        rb.AddForce(m_Movement.moveDirection.normalized * 5.0f, ForceMode.Force);
+        rb.isKinematic = false;
+        rb.linearVelocity = m_Movement.moveDirection.normalized * 10.0f;
+
+        m_CurrentlyHeldEntity.Drop();
+        m_CurrentlyHeldEntity = null;
+
     }
 }
