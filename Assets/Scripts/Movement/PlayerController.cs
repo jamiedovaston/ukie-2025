@@ -1,0 +1,52 @@
+﻿using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PlayerController : MonoBehaviour
+{
+    public PlayerMovement m_Movement;
+
+    InputSystem_Actions m_ActionMap;
+
+    private void Awake()
+    {
+        m_Movement = GetComponent<PlayerMovement>();
+    }
+
+    public void OnEnable()
+    {
+        m_ActionMap = new InputSystem_Actions();
+
+        m_ActionMap.Enable();
+
+        m_ActionMap.Player.Move.performed += Move_performed;
+        m_ActionMap.Player.Move.canceled += Move_canceled;
+    }
+
+
+    private void OnDisable()
+    {
+        m_ActionMap.Player.Move.performed -= Move_performed;
+        m_ActionMap.Player.Move.canceled -= Move_canceled;
+
+        m_ActionMap.Disable();
+    }
+
+    #region Actions
+
+    private void Move_performed(InputAction.CallbackContext obj)
+    {
+        Vector2 input = obj.ReadValue<Vector2>();
+
+        Debug.Assert(input != null, "Movement values null!");
+
+        m_Movement.Move(input);
+    }
+
+    private void Move_canceled(InputAction.CallbackContext obj)
+    {
+        m_Movement.Move(Vector2.zero);
+    }
+
+    #endregion
+
+}
