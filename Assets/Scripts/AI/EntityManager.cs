@@ -28,7 +28,7 @@ public class EntityManager : MonoSingleton<EntityManager>
             foreach(TeamData t in data.Teams)
             {
                 Entity entity = Instantiate(m_EntityPrefab, GetRandomDoor(), Quaternion.identity).GetComponent<Entity>();
-                entity.Initialise(5.0f, t);
+                entity.Initialise(t);
                 yield return new WaitForSeconds(Random.Range(.6f, 1.5f));
             }
             

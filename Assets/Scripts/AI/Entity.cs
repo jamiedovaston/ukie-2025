@@ -11,7 +11,7 @@ public class Entity : MonoBehaviour
 
     public MeshRenderer m_Mesh;
 
-    private float m_MoveSpeed;
+    public float m_StartMoveSpeed, m_MaxMoveSpeed;
     public TeamData m_Team { get; set; }
 
     private NavMeshAgent m_NavMeshAgent;
@@ -25,9 +25,9 @@ public class Entity : MonoBehaviour
 
     public bool isDead { get; private set; } = false;
 
-    public void Initialise(float _moveSpeed, TeamData _data)
+    public void Initialise(TeamData _data)
     {
-        m_MoveSpeed = _moveSpeed;
+        m_StartMoveSpeed = Mathf.Min(m_StartMoveSpeed * (1 + (.0005f * GameManager.GAME_TIME)), m_MaxMoveSpeed);
         m_Team = _data;
 
         m_Mesh.material.color = _data.color;

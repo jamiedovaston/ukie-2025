@@ -4,7 +4,6 @@ using System.Collections;
 public class ExpandingCorruptionField : MonoBehaviour
 {
     private SphereCollider m_Corruption;
-    public float expansionRate = 1.05f; // Expansion rate per frame
     public float expansionInterval = 1.0f; // Time interval between expansions in seconds
 
     private Collider[] allColliders;
@@ -21,7 +20,7 @@ public class ExpandingCorruptionField : MonoBehaviour
     {
         while (m_Corruption != null)
         {
-            m_Corruption.radius *= expansionRate;
+            m_Corruption.radius *= GameManager.EXPANSION_RATE;
             yield return new WaitForSeconds(expansionInterval);
         }
     }
