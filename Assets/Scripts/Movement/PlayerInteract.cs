@@ -65,7 +65,6 @@ public class PlayerInteract : MonoBehaviour
     private IEnumerator C_Holding()
     {
         m_CurrentlyHeldEntity.transform.SetParent(transform);
-        AudioUtility.PlaySound(AudioData.Get("3"), AudioSourceType.SFX);
 
         while (holding)
         {
@@ -75,7 +74,8 @@ public class PlayerInteract : MonoBehaviour
         }
 
         if (m_CurrentlyHeldEntity == null) yield break;
-        
+        AudioUtility.PlaySound(AudioData.Get("3"), AudioSourceType.SFX);
+
         m_CurrentlyHeldEntity.transform.localPosition = Vector3.zero;
         m_CurrentlyHeldEntity.transform.SetParent(null);
         m_CurrentlyHeldEntity.lookToCamera.m_LookAtConstraint.rotationOffset = new Vector3(90.0f, 0.0f, 0.0f);
