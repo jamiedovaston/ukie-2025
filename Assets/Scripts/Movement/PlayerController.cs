@@ -43,9 +43,9 @@ public class PlayerController : MonoBehaviour
 
     private void Interact_performed(InputAction.CallbackContext obj)
     {
-        Debug.Log("E");
         m_Interact.Interact();
     }
+
     private void Move_performed(InputAction.CallbackContext obj)
     {
         Vector2 input = obj.ReadValue<Vector2>();
