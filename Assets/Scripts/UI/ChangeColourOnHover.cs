@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;// Required when using Event data.
 using TMPro;
 using NUnit.Framework.Internal;
+using JD.Utility.Audio;
 
 public class ChangeColourOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -42,6 +43,7 @@ public class ChangeColourOnHover : MonoBehaviour, IPointerEnterHandler, IPointer
         _childText.color = Color.white;
         //this.gameObject.GetComponentInParent<Image>().color = _hoverColor;
         Debug.Log("The cursor entered the selectable UI element.");
+        AudioUtility.PlaySound(AudioData.Get("2"), AudioSourceType.SFX);
     }
 
     public void OnPointerExit(PointerEventData eventData)

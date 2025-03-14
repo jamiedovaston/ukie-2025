@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0bbb346940a9254a98a9ce8710abfa2, type: 3}
+  m_Name: team_opposition_chart_analguos
+  m_EditorClassIdentifier: 
+  data:
+  - Teams:
+    - {fileID: 11400000, guid: 638d776d77b12874694a03d109ba2004, type: 2}
+    - {fileID: 11400000, guid: f79d1d3e1268efb499121f4fc3d385c3, type: 2}
+    - {fileID: 11400000, guid: 110b29c134a5cf54db60bd8caab064bd, type: 2}
+  - Teams:
+    - {fileID: 11400000, guid: f79d1d3e1268efb499121f4fc3d385c3, type: 2}
+    - {fileID: 11400000, guid: 110b29c134a5cf54db60bd8caab064bd, type: 2}
+    - {fileID: 11400000, guid: ec82d10e77fd55f45aad7b69f51c3a3e, type: 2}
+  - Teams:
+    - {fileID: 11400000, guid: 110b29c134a5cf54db60bd8caab064bd, type: 2}
+    - {fileID: 11400000, guid: ec82d10e77fd55f45aad7b69f51c3a3e, type: 2}
+    - {fileID: 11400000, guid: a37791371fe9c7046a9a1afcfe699c4a, type: 2}
+  - Teams:
+    - {fileID: 11400000, guid: ec82d10e77fd55f45aad7b69f51c3a3e, type: 2}
+    - {fileID: 11400000, guid: a37791371fe9c7046a9a1afcfe699c4a, type: 2}
+    - {fileID: 11400000, guid: 08cd1cb2506b70642a6f4334c90ee83d, type: 2}
+  - Teams:
+    - {fileID: 11400000, guid: a37791371fe9c7046a9a1afcfe699c4a, type: 2}
+    - {fileID: 11400000, guid: 08cd1cb2506b70642a6f4334c90ee83d, type: 2}
+    - {fileID: 11400000, guid: 638d776d77b12874694a03d109ba2004, type: 2}
+  - Teams:
+    - {fileID: 11400000, guid: 08cd1cb2506b70642a6f4334c90ee83d, type: 2}
+    - {fileID: 11400000, guid: 638d776d77b12874694a03d109ba2004, type: 2}
+    - {fileID: 11400000, guid: f79d1d3e1268efb499121f4fc3d385c3, type: 2}
