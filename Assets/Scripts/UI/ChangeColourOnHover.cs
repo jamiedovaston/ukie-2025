@@ -2,20 +2,24 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;// Required when using Event data.
+using TMPro;
+using NUnit.Framework.Internal;
 
-
-public class ChangeColourOnHover : MonoBehaviour, IPointerEnterHandler
+public class ChangeColourOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [System.Serializable]
+    /*[System.Serializable]
     public struct MenuSlice
     {
         public UnityEngine.UI.Image image;
         public Color color;
     }
+*/
+    [SerializeField] private UnityEngine.UI.Image _parentImage;
 
-    [SerializeField]
-    private List<MenuSlice> _menuSlices;
+    [SerializeField] private TMP_Text _childText;
+    [SerializeField] private Color _textColor;
 
+    [SerializeField] private Color _color;
     [SerializeField] private Color _hoverColor = Color.red;
 
     private int _UILayer = 0;
@@ -34,8 +38,17 @@ public class ChangeColourOnHover : MonoBehaviour, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        _menuSlices[0].image.color = _hoverColor;
+        _parentImage.color = _hoverColor;
+        _childText.color = Color.white;
         //this.gameObject.GetComponentInParent<Image>().color = _hoverColor;
         Debug.Log("The cursor entered the selectable UI element.");
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        _parentImage.color = _color;
+        _childText.color = _textColor;
+        //this.gameObject.GetComponentInParent<Image>().color = _hoverColor;
+        Debug.Log("The cursor exited the selectable UI element.");
     }
 }
