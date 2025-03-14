@@ -43,4 +43,23 @@ public class TeamOppositionChartSO : ScriptableObject
         }
         return false;
     }
+
+    public static List<TeamData> GetAllOpposingTeams(string id)
+    {
+        List<TeamData> opposingTeams = new List<TeamData>();
+
+        foreach (TeamOpposition_Data oppositionData in instance.data)
+        {
+            List<string> teamIds = oppositionData.Teams.Select(team => team.name).ToList();
+
+            if (teamIds.Contains(id))
+            {
+                // Add all opposing teams except the one we're checking
+                opposingTeams.AddRange(oppositionData.Teams.Where(team => team.name != id));
+            }
+        }
+
+        return opposingTeams.Distinct().ToList(); // Ensure no duplicates
+    }
+
 }

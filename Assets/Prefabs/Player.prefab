@@ -78,6 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Radius: 1
+  m_HoldingHeight: 0.2
   m_Movement: {fileID: 746880226467953329}
 --- !u!143 &7084997098238410395
 CharacterController:
