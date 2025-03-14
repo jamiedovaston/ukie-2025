@@ -23,6 +23,8 @@ public class Chair : MonoBehaviour
 
     public static Chair GetRandomChair()
     {
+        allChairs = FindObjectsByType<Chair>(FindObjectsSortMode.None).ToList();
+        
         if (allChairs == null || allChairs.Count == 0)
             return null;
 
@@ -30,5 +32,10 @@ public class Chair : MonoBehaviour
         Chair chair = allChairs[random];
 
         return chair;
+    }
+
+    public static void ClearChairs()
+    {
+        allChairs = null;
     }
 }

@@ -27,7 +27,7 @@ public class Entity : MonoBehaviour
 
     public void Initialise(TeamData _data)
     {
-        m_StartMoveSpeed = Mathf.Min(m_StartMoveSpeed * (1 + (.0005f * GameManager.GAME_TIME)), m_MaxMoveSpeed);
+        m_StartMoveSpeed = Mathf.Min(m_StartMoveSpeed * (1 + (.00005f * GameManager.GAME_TIME)), m_MaxMoveSpeed);
         m_Team = _data;
 
         m_Mesh.material.color = _data.color;

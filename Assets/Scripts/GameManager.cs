@@ -8,16 +8,17 @@ using UnityEngine;
 public class GameManager : MonoSingleton<GameManager>
 {
     public static float GAME_TIME = 0.0f;
-    public static float EXPANSION_RATE = 1.05f;
-    public static float MAX_EXPANSION_RATE = 2.0f; // Maximum limit for expansion
+    public static float EXPANSION_RATE = 1.00f;
+    public static float MAX_EXPANSION_RATE = 1.5f; // Maximum limit for expansion
 
     public void Start()
     {
+        Chair.ClearChairs();
         StartCoroutine(C_Gameplay());
         
         // defaults
         GAME_TIME = 0.0f;
-        EXPANSION_RATE = 1.05f;
+        EXPANSION_RATE = 1.00f;
     }
 
     IEnumerator C_Gameplay()
