@@ -16,11 +16,9 @@ public class PlayerInteract : MonoBehaviour
         if(m_CurrentlyHeldEntity != null)
         {
             holding = false;
-            Debug.Log("Entity dropped!");
         }
         else
         {
-            Debug.Log("Finding entity...");
             Collider[] collisions = Physics.OverlapSphere(transform.position, m_Radius);
             Entity closestEntity = null;
             float closestDistance = Mathf.Infinity;
@@ -28,9 +26,8 @@ public class PlayerInteract : MonoBehaviour
             foreach (Collider c in collisions)
             {
                 Entity e = c.GetComponent<Entity>();
-                if (e)
+                if (e && !e.isDead)
                 {
-                    Debug.Log("Found Entity!");
                     float distance = Vector3.Distance(transform.position, c.transform.position);
                     if (distance < closestDistance)
                     {
@@ -44,7 +41,6 @@ public class PlayerInteract : MonoBehaviour
             {
                 m_CurrentlyHeldEntity = closestEntity;
                 closestEntity.Pickup();
-                Debug.Log($"Entity picked up: {closestEntity.name}");  
                 holding = true;
                 StartCoroutine(C_Holding());
             }
@@ -54,14 +50,18 @@ public class PlayerInteract : MonoBehaviour
     private IEnumerator C_Holding()
     {
         m_CurrentlyHeldEntity.transform.SetParent(transform);
-        m_CurrentlyHeldEntity.transform.localPosition = Vector3.zero;
         
         while (holding)
         {
+            m_CurrentlyHeldEntity.transform.localPosition = Vector3.up * m_Radius;
+            m_CurrentlyHeldEntity.lookToCamera.m_LookAtConstraint.rotationOffset = new Vector3(90.0f, -90.0f, 0.0f);
             yield return new WaitForFixedUpdate();
         }
+
+        if (m_CurrentlyHeldEntity == null) yield break;
         
         m_CurrentlyHeldEntity.transform.SetParent(null);
+        m_CurrentlyHeldEntity.lookToCamera.m_LookAtConstraint.rotationOffset = new Vector3(90.0f, 0.0f, 0.0f);
 
         Rigidbody rb = m_CurrentlyHeldEntity.GetComponent<Rigidbody>();
         rb.isKinematic = false;

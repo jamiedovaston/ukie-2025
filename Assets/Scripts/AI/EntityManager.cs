@@ -13,7 +13,6 @@ public class EntityManager : MonoSingleton<EntityManager>
 
     private bool hasEnded = false;
 
-    [ContextMenu("Initialise")]
     public void Initialise()
     {
         hasEnded = false;
@@ -24,7 +23,6 @@ public class EntityManager : MonoSingleton<EntityManager>
     {
         while (!hasEnded)
         {
-            yield return new WaitForSeconds(2); // replace
             TeamOpposition_Data data = TeamOppositionChartSO.instance.GetRandomTeamData();
 
             foreach(TeamData t in data.Teams)
@@ -33,6 +31,8 @@ public class EntityManager : MonoSingleton<EntityManager>
                 entity.Initialise(5.0f, t);
                 yield return new WaitForSeconds(Random.Range(.6f, 1.5f));
             }
+            
+            yield return new WaitForSeconds(2); // BUFFER THAT SHOULD BE REPLACED BY GAME MANAGER SPEED UP
         }
     }
 

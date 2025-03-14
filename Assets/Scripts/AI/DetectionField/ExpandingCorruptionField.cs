@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class ExpandingCorruptionField : MonoBehaviour
 {
@@ -6,21 +7,34 @@ public class ExpandingCorruptionField : MonoBehaviour
     public float expansionRate = 1.05f; // Expansion rate per frame
     public float expansionInterval = 1.0f; // Time interval between expansions in seconds
 
+    private Collider[] allColliders;
+
     private void Awake()
     {
         m_Corruption = GetComponent<SphereCollider>();
+        allColliders = GetComponents<Collider>();
         m_Corruption.radius = 1.0f;
         StartCoroutine(ExpandRadius());
     }
 
-    private System.Collections.IEnumerator ExpandRadius()
+    private IEnumerator ExpandRadius()
     {
-        while (true)
+        while (m_Corruption != null)
         {
             m_Corruption.radius *= expansionRate;
             yield return new WaitForSeconds(expansionInterval);
         }
     }
+
+    public void SetActive(bool active)
+    { 
+        m_Corruption.enabled = active;
+        foreach (Collider c in allColliders)
+        {
+            c.enabled = active;
+        }
+    }
+        
 
     private void OnTriggerEnter(Collider collision)
     {

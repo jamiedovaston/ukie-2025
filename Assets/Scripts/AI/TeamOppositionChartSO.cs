@@ -32,6 +32,7 @@ public class TeamOppositionChartSO : ScriptableObject
 
     public static bool IsOpposingTeam(string id1, string id2)
     {
+        if (id1 == id2) return false;
         foreach (TeamOpposition_Data oppositionData in instance.data)
         {
             List<string> teamIds = oppositionData.Teams.Select(team => team.name).ToList();
