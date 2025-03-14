@@ -1,6 +1,8 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using JD.Utility.General;
 using TMPro;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class UIManager : MonoSingleton<UIManager>
@@ -9,6 +11,11 @@ public class UIManager : MonoSingleton<UIManager>
     public TMP_Text m_CountdownText;
 
     public TMP_Text m_CorruptionPercentageText;
+
+    public Canvas m_GameOverCanvas;
+
+    public GameObject m_ColourSprite;
+    public Transform m_ColourSpriteHolder;
 
     public void Start()
     {
@@ -42,5 +49,29 @@ public class UIManager : MonoSingleton<UIManager>
     public void ChangeCorruptionAmount(float corruptedPerc)
     {
         m_CorruptionPercentageText.text = $"{ corruptedPerc.ToString("0.0") }%";
+    }
+
+    public void GameOver()
+    {
+        m_GameOverCanvas.gameObject.SetActive(true);
+    }
+
+    public void SpawnColoursThatCanBeHit(List<TeamData> teams)
+    {
+        DeleteColoursThatCanBeHit();
+        
+        foreach (TeamData t in teams)
+        {
+            Image image = Instantiate(m_ColourSprite, m_ColourSpriteHolder).GetComponent<Image>();
+            image.color = t.color;
+        }
+    }
+
+    public void DeleteColoursThatCanBeHit()
+    {
+        foreach (Transform child in m_ColourSpriteHolder)
+        {
+            Destroy(child.gameObject);
+        }
     }
 }

@@ -9,10 +9,10 @@ public class GameManager : MonoSingleton<GameManager>
 {
     public void Start()
     {
-        StartCoroutine(C_StartGame());
+        StartCoroutine(C_Gameplay());
     }
 
-    IEnumerator C_StartGame()
+    IEnumerator C_Gameplay()
     {
         yield return StartCoroutine(UIManager.instance.C_Countdown());
 
@@ -35,6 +35,8 @@ public class GameManager : MonoSingleton<GameManager>
         }
 
         Debug.Log("All objects are corrupted!");
+        
+        UIManager.instance.GameOver();
     }
 
 }

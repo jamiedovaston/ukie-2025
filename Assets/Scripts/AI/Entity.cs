@@ -12,7 +12,7 @@ public class Entity : MonoBehaviour
     public MeshRenderer m_Mesh;
 
     private float m_MoveSpeed;
-    private TeamData m_Team;
+    public TeamData m_Team { get; set; }
 
     private NavMeshAgent m_NavMeshAgent;
     private Rigidbody rb;
@@ -42,6 +42,8 @@ public class Entity : MonoBehaviour
     public void Pickup()
     {
         m_NavMeshAgent.isStopped = true;
+        m_NavMeshAgent.updatePosition = false;
+        m_NavMeshAgent.updateRotation = false;
         pickedUp = true;
     }
     
@@ -66,6 +68,10 @@ public class Entity : MonoBehaviour
         StartCoroutine(C_NavigateToChair());
         rb.isKinematic = true;
         m_NavMeshAgent.isStopped = false;
+        m_NavMeshAgent.nextPosition = transform.position;
+        m_NavMeshAgent.updatePosition = true;
+        m_NavMeshAgent.updateRotation = true;
+
     }
 
     public IEnumerator C_NavigateToChair()
@@ -99,12 +105,21 @@ public class Entity : MonoBehaviour
     {
         currentChair = chair;
         chair.occupied = true;
+        
+        m_NavMeshAgent.isStopped = true;
+        m_NavMeshAgent.updatePosition = false;
+        m_NavMeshAgent.updateRotation = false;
 
         while (!pickedUp && !ragdoll && !isDead)
         {
             yield return new WaitForFixedUpdate();
             transform.position = chair.sitSocket.position;
         }
+        
+        m_NavMeshAgent.isStopped = true;
+        m_NavMeshAgent.nextPosition = transform.position;
+        m_NavMeshAgent.updatePosition = false;
+        m_NavMeshAgent.updateRotation = false;
         
         chair.occupied = false;
         currentChair = null;
@@ -139,6 +154,9 @@ public class Entity : MonoBehaviour
         StopAllCoroutines();
         rb.isKinematic = true;
         m_NavMeshAgent.isStopped = false;
+        m_NavMeshAgent.nextPosition = transform.position;
+        m_NavMeshAgent.updatePosition = true;
+        m_NavMeshAgent.updateRotation = true;
 
         m_NavMeshAgent.speed = 1.0f;
 
