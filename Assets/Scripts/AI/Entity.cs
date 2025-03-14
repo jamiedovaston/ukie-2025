@@ -16,9 +16,14 @@ public class Entity : MonoBehaviour
 
     private NavMeshAgent m_NavMeshAgent;
     private Rigidbody rb;
+    private ExpandingCorruptionField m_Corruption;
+    
+    public LookToCamera lookToCamera;
 
     private bool pickedUp = false;
     private bool ragdoll = false;
+
+    public bool isDead { get; private set; } = false;
 
     public void Initialise(float _moveSpeed, TeamData _data)
     {
@@ -29,6 +34,7 @@ public class Entity : MonoBehaviour
 
         m_NavMeshAgent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
+        m_Corruption = GetComponent<ExpandingCorruptionField>();
 
         StartCoroutine(C_NavigateToChair());
     }
@@ -41,17 +47,21 @@ public class Entity : MonoBehaviour
     
     public void Drop()
     {
-        if (C_Ragdoll != null) StopCoroutine(C_Ragdoll);
+        if (C_Ragdoll != null)
+        {
+            StopCoroutine(C_Ragdoll);
+            C_Ragdoll = null;
+        }
         C_Ragdoll = StartCoroutine(C_RagdollWait());
         pickedUp = false;
     }
 
     Coroutine C_Ragdoll;
-
     public IEnumerator C_RagdollWait()
     {
         ragdoll = true;
         yield return new WaitForSeconds(3.0f);
+        if(pickedUp) yield break;
         ragdoll = false;
         StartCoroutine(C_NavigateToChair());
         rb.isKinematic = true;
@@ -84,31 +94,35 @@ public class Entity : MonoBehaviour
         }
     }
 
+    private Chair currentChair;
     public IEnumerator C_SitInChair(Chair chair)
     {
+        currentChair = chair;
         chair.occupied = true;
 
-        while (!pickedUp)
+        while (!pickedUp && !ragdoll && !isDead)
         {
             yield return new WaitForFixedUpdate();
             transform.position = chair.sitSocket.position;
         }
-
+        
         chair.occupied = false;
+        currentChair = null;
+
     }
 
     public void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collisions!");
-        if (!ragdoll) return;
+        if (!ragdoll || pickedUp) return;
 
         Entity other = collision.gameObject.GetComponent<Entity>();
 
         if (other)
         {
+            if (other.pickedUp) return;
+            
             if(TeamOppositionChartSO.IsOpposingTeam(other.m_Team.name, m_Team.name))
             {
-                Debug.Log("Hit!");
                 other.Hit();
                 Destroy(gameObject);
             }
@@ -117,14 +131,49 @@ public class Entity : MonoBehaviour
 
     public void Hit()
     {
+        isDead = true;
         ragdoll = false;
+        if(currentChair != null)
+            currentChair.occupied = false;
+        currentChair = null;
         StopAllCoroutines();
         rb.isKinematic = true;
         m_NavMeshAgent.isStopped = false;
 
+        m_NavMeshAgent.speed = 1.0f;
+
         Normal.SetActive(true);
         Corrupted.SetActive(false);
+        
+        m_Corruption.SetActive(false);
 
-        m_NavMeshAgent.SetDestination(EntityManager.Instance.GetRandomDoor());
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+
+        foreach (Collider c in colliders)
+        {
+            Destroy(c);
+        }
+        
+        StartCoroutine(C_NavigateToDoor());
+    } 
+    
+    public IEnumerator C_NavigateToDoor()
+    {
+        Vector3 door = EntityManager.Instance.GetRandomDoor();
+        if (door == Vector3.zero)
+        {
+            Destroy(gameObject);
+        }
+
+        m_NavMeshAgent.SetDestination(door);
+    
+        while (Vector3.Distance(transform.position, door) > 2 && !pickedUp)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+    
+        Destroy(gameObject);
     }
+    
+    
 }

@@ -16,8 +16,8 @@ namespace JD.Utility.General
             {
                 if (instance == null)
                 {
-                    instance = FindObjectOfType<T>();
-
+                    instance = FindAnyObjectByType<T>();
+                    
                     if (instance == null)
                     {
                         GameObject singletonObject = new GameObject(typeof(T).Name + " (Singleton)");

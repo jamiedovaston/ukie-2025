@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,6 +11,17 @@ public class CorruptionSwap : MonoBehaviour
 
     private HashSet<Collider> m_Colliders = new HashSet<Collider>();
 
+    public bool isCorrupted { get; private set; }
+
+    private void Update()
+    {
+        // Find all null colliders and call OnCollideExit before removing them
+        foreach (Collider collider in m_Colliders.Where(c => c == null).ToList())
+        {
+            OnCollideExit(collider); // Handle exit before removal
+        }
+    }
+
     public void OnCollide(Collider collider)
     {
         if (!m_Colliders.Add(collider))
@@ -17,6 +29,8 @@ public class CorruptionSwap : MonoBehaviour
             return;
         }
 
+        isCorrupted = true;
+        
         Normal.SetActive(false);
         Corrupted.SetActive(true);
     }
@@ -27,6 +41,8 @@ public class CorruptionSwap : MonoBehaviour
         {
             if (!m_Colliders.Any())
             {
+                isCorrupted = false;
+                
                 Normal.SetActive(true);
                 Corrupted.SetActive(false);
             }

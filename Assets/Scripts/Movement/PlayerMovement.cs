@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
 
     public float speed = 5f;
+    [HideInInspector]
     public Vector3 moveDirection;
 
     private void Awake()
@@ -29,6 +30,12 @@ public class PlayerMovement : MonoBehaviour
         if (controller != null)
         {
             controller.Move(moveDirection * Time.deltaTime);
+        
+            // Ensure y position is always 1
+            Vector3 newPosition = transform.position;
+            newPosition.y = 1;
+            transform.position = newPosition;
         }
     }
+
 }

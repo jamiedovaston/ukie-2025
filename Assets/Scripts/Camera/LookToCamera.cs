@@ -4,7 +4,8 @@ using UnityEngine.Animations;
 [RequireComponent(typeof(LookAtConstraint))]
 public class LookToCamera : MonoBehaviour
 {
-    private LookAtConstraint m_LookAtConstraint;
+    [HideInInspector]
+    public LookAtConstraint m_LookAtConstraint;
 
     private void Start()
     {
