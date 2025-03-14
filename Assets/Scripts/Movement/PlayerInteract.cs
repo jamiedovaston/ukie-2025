@@ -65,7 +65,8 @@ public class PlayerInteract : MonoBehaviour
     private IEnumerator C_Holding()
     {
         m_CurrentlyHeldEntity.transform.SetParent(transform);
-        
+        AudioUtility.PlaySound(AudioData.Get("3"), AudioSourceType.SFX);
+
         while (holding)
         {
             m_CurrentlyHeldEntity.transform.localPosition = Vector3.up * m_HoldingHeight;

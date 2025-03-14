@@ -1,4 +1,6 @@
+using JD.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ExitButton : MonoBehaviour
 {
@@ -25,8 +27,7 @@ public class ExitButton : MonoBehaviour
     //Exits Game
     public void QuitGame()
     {
-        Debug.Log("Game has been exited");
-        Application.Quit();
+        SceneManager.LoadScene("HomeMenu");
     }
 
     public void ExitMenu()
