@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "JD/Teams/Opposition Chart", fileName = "team_opposition_NAME")]
@@ -24,8 +25,21 @@ public class TeamOppositionChartSO : ScriptableObject
     {
         get
         {
-            if(chart == null) chart = Resources.Load<TeamOppositionChartSO>("team_opposition_chart");
+            if (chart == null) chart = Resources.Load<TeamOppositionChartSO>("team_opposition_chart");
             return chart;
         }
+    }
+
+    public static bool IsOpposingTeam(string id1, string id2)
+    {
+        foreach (TeamOpposition_Data oppositionData in instance.data)
+        {
+            List<string> teamIds = oppositionData.Teams.Select(team => team.name).ToList();
+            if (teamIds.Contains(id1) && teamIds.Contains(id2))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

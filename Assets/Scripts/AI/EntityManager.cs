@@ -1,10 +1,11 @@
+using JD.Utility.General;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using static TeamOppositionChartSO;
 
-public class EntityManager : MonoBehaviour
+public class EntityManager : MonoSingleton<EntityManager>
 {
     public GameObject m_EntityPrefab;
 
@@ -28,10 +29,12 @@ public class EntityManager : MonoBehaviour
 
             foreach(TeamData t in data.Teams)
             {
-                Entity entity = Instantiate(m_EntityPrefab, m_SpawnPoints[Random.Range(0, m_SpawnPoints.Count)].position, Quaternion.identity).GetComponent<Entity>();
+                Entity entity = Instantiate(m_EntityPrefab, GetRandomDoor(), Quaternion.identity).GetComponent<Entity>();
                 entity.Initialise(5.0f, t);
                 yield return new WaitForSeconds(Random.Range(.6f, 1.5f));
             }
         }
     }
+
+    public Vector3 GetRandomDoor() => m_SpawnPoints[Random.Range(0, m_SpawnPoints.Count)].position;
 }

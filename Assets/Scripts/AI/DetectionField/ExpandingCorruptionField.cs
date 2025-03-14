@@ -24,7 +24,6 @@ public class ExpandingCorruptionField : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        Debug.Log($"OnTriggerEnter: {collision.name}");
         CorruptionSwap swap = collision.gameObject.GetComponent<CorruptionSwap>();
         if (swap)
             swap.OnCollide(m_Corruption);
@@ -32,7 +31,6 @@ public class ExpandingCorruptionField : MonoBehaviour
 
     private void OnTriggerExit(Collider collision)
     {
-        Debug.Log($"OnTriggerExit: {collision.name}");
         CorruptionSwap swap = collision.gameObject.GetComponent<CorruptionSwap>();
         if (swap)
             swap.OnCollideExit(m_Corruption);

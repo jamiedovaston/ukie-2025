@@ -1,10 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Entity : MonoBehaviour
 {
+    public GameObject Normal, Corrupted;
+
     public MeshRenderer m_Mesh;
 
     private float m_MoveSpeed;
@@ -14,6 +18,7 @@ public class Entity : MonoBehaviour
     private Rigidbody rb;
 
     private bool pickedUp = false;
+    private bool ragdoll = false;
 
     public void Initialise(float _moveSpeed, TeamData _data)
     {
@@ -42,9 +47,12 @@ public class Entity : MonoBehaviour
     }
 
     Coroutine C_Ragdoll;
+
     public IEnumerator C_RagdollWait()
     {
+        ragdoll = true;
         yield return new WaitForSeconds(3.0f);
+        ragdoll = false;
         StartCoroutine(C_NavigateToChair());
         rb.isKinematic = true;
         m_NavMeshAgent.isStopped = false;
@@ -87,5 +95,36 @@ public class Entity : MonoBehaviour
         }
 
         chair.occupied = false;
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collisions!");
+        if (!ragdoll) return;
+
+        Entity other = collision.gameObject.GetComponent<Entity>();
+
+        if (other)
+        {
+            if(TeamOppositionChartSO.IsOpposingTeam(other.m_Team.name, m_Team.name))
+            {
+                Debug.Log("Hit!");
+                other.Hit();
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    public void Hit()
+    {
+        ragdoll = false;
+        StopAllCoroutines();
+        rb.isKinematic = true;
+        m_NavMeshAgent.isStopped = false;
+
+        Normal.SetActive(true);
+        Corrupted.SetActive(false);
+
+        m_NavMeshAgent.SetDestination(EntityManager.Instance.GetRandomDoor());
     }
 }
